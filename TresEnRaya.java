@@ -73,6 +73,7 @@ public class TresEnRaya {
             }
             System.out.println();
         }
+        System.out.println();
     }
 
     private static boolean checkWin(char[][] board, char player) {
@@ -100,13 +101,23 @@ public class TresEnRaya {
         int bestValue = Integer.MIN_VALUE;
         Move bestMove = new Move(-1, -1);
 
+        System.out.println("Evaluando todas las posibilidades para el turno de la computadora...");
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (board[i][j] == EMPTY) {
+                    // Simular el movimiento
                     board[i][j] = AI;
+                    System.out.println("Posibilidad:");
+                    printBoard(board);
+
+                    // Evaluar el movimiento usando Minimax
                     int moveValue = minimax(board, 0, false);
+                    System.out.println("Valor del movimiento: " + moveValue);
+
+                    // Deshacer el movimiento
                     board[i][j] = EMPTY;
 
+                    // Actualizar el mejor movimiento
                     if (moveValue > bestValue) {
                         bestMove.row = i;
                         bestMove.col = j;
@@ -158,3 +169,4 @@ public class TresEnRaya {
         }
     }
 }
+
