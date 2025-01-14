@@ -28,7 +28,7 @@ class AIPlayer extends Player {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == Board.EMPTY) {
-                    board[i][j] = symbol;
+                    board[i][j] = Board.AI;
                     int moveValue = minimax(board, 0, false);
                     board[i][j] = Board.EMPTY;
 

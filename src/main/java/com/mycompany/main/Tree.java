@@ -8,13 +8,15 @@ package com.mycompany.main;
  *
  * @author User
  */
-public class Tree<E> {
-    
-    // Un árbol solo conoce a su nodo raiz, que es de tipo NodeTree
+class Tree<E> {
     private NodeTree<E> root;
 
     public Tree() {
         this.root = null;
+    }
+
+    public Tree(NodeTree<E> root) {
+        this.root = root;
     }
 
     public NodeTree<E> getRoot() {
@@ -24,5 +26,4 @@ public class Tree<E> {
     public void setRoot(NodeTree<E> root) {
         this.root = root;
     }
-    
 }
