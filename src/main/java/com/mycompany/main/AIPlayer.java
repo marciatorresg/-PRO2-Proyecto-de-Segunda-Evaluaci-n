@@ -9,7 +9,6 @@ package com.mycompany.main;
  * @author User
  */
 import java.util.Scanner;
-
 class AIPlayer extends Player {
     public AIPlayer(char symbol) {
         super(symbol);
@@ -17,61 +16,103 @@ class AIPlayer extends Player {
 
     @Override
     public void makeMove(Board board, Scanner scanner) {
-        Move bestMove = findBestMove(board.getBoardCopy());
-        board.setCell(bestMove.row, bestMove.col, symbol);
+        Tree<GameState> gameTree = generateGameTree(board, symbol);
+        NodeTree<GameState> bestNode = findBestMoveUsingTree(gameTree);
+
+        if (bestNode != null) {
+            Move bestMove = bestNode.getContent().getMove();
+            board.setCell(bestMove.row, bestMove.col, symbol);
+        }
     }
 
-    private Move findBestMove(char[][] board) {
-        int bestValue = Integer.MIN_VALUE;
-        Move bestMove = new Move(-1, -1);
+    private Tree<GameState> generateGameTree(Board board, char currentSymbol) {
+        Tree<GameState> tree = new Tree<>();
+        NodeTree<GameState> root = new NodeTree<>(new GameState(board.getBoardCopy(), null));
+        tree.setRoot(root);
+        generateChildren(root, currentSymbol);
+        return tree;
+    }
+
+    private void generateChildren(NodeTree<GameState> node, char currentSymbol) {
+        char[][] board = node.getContent().getBoard();
+
+        if (BoardUtils.checkWin(board, Board.AI) || BoardUtils.checkWin(board, Board.HUMAN) || BoardUtils.isFull(board)) {
+            return;
+        }
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == Board.EMPTY) {
-                    board[i][j] = Board.AI;
-                    int moveValue = minimax(board, 0, false);
-                    board[i][j] = Board.EMPTY;
-
-                    if (moveValue > bestValue) {
-                        bestMove.row = i;
-                        bestMove.col = j;
-                        bestValue = moveValue;
-                    }
+                    char[][] newBoard = board;
+                    newBoard[i][j] = currentSymbol;
+                    Move move = new Move(i, j);
+                    NodeTree<GameState> child = new NodeTree<>(new GameState(newBoard, move));
+                    node.getChildren().add(new Tree<>(child));
+                    generateChildren(child, switchPlayer(currentSymbol));
                 }
             }
         }
-        return bestMove;
     }
 
-    private int minimax(char[][] board, int depth, boolean isMaximizing) {
-        if (BoardUtils.checkWin(board, Board.AI)) return 10 - depth;
-        if (BoardUtils.checkWin(board, Board.HUMAN)) return depth - 10;
-        if (BoardUtils.isFull(board)) return 0;
+    private char switchPlayer(char currentSymbol) {
+        return currentSymbol == Board.AI ? Board.HUMAN : Board.AI;
+    }
 
-        if (isMaximizing) {
-            int best = Integer.MIN_VALUE;
-            for (int i = 0; i < board.length; i++) {
-                for (int j = 0; j < board[i].length; j++) {
-                    if (board[i][j] == Board.EMPTY) {
-                        board[i][j] = Board.AI;
-                        best = Math.max(best, minimax(board, depth + 1, false));
-                        board[i][j] = Board.EMPTY;
-                    }
-                }
-            }
-            return best;
-        } else {
-            int best = Integer.MAX_VALUE;
-            for (int i = 0; i < board.length; i++) {
-                for (int j = 0; j < board[i].length; j++) {
-                    if (board[i][j] == Board.EMPTY) {
-                        board[i][j] = Board.HUMAN;
-                        best = Math.min(best, minimax(board, depth + 1, true));
-                        board[i][j] = Board.EMPTY;
-                    }
-                }
-            }
-            return best;
+    private NodeTree<GameState> findBestMoveUsingTree(Tree<GameState> tree) {
+        return minimax(tree.getRoot(), true).node;
+    }
+
+    private MinimaxResult minimax(NodeTree<GameState> node, boolean isMaximizing) {
+        if (node.getChildren().isEmpty()) {
+            char[][] board = node.getContent().getBoard();
+            int score = evaluateBoard(board);
+            return new MinimaxResult(score, node);
         }
+
+        MinimaxResult bestResult = new MinimaxResult(isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE, null);
+
+        for (Tree<GameState> childTree : node.getChildren()) {
+            MinimaxResult childResult = minimax(childTree.getRoot(), !isMaximizing);
+            if (isMaximizing && childResult.score > bestResult.score ||
+                !isMaximizing && childResult.score < bestResult.score) {
+                bestResult = new MinimaxResult(childResult.score, childTree.getRoot());
+            }
+        }
+
+        return bestResult;
+    }
+
+    private int evaluateBoard(char[][] board) {
+        if (BoardUtils.checkWin(board, Board.AI)) return 10;
+        if (BoardUtils.checkWin(board, Board.HUMAN)) return -10;
+        return 0;
+    }
+
+    private static class MinimaxResult {
+        int score;
+        NodeTree<GameState> node;
+
+        MinimaxResult(int score, NodeTree<GameState> node) {
+            this.score = score;
+            this.node = node;
+        }
+    }
+}
+
+class GameState {
+    private final char[][] board;
+    private final Move move;
+
+    public GameState(char[][] board, Move move) {
+        this.board = board;
+        this.move = move;
+    }
+
+    public char[][] getBoard() {
+        return board;
+    }
+
+    public Move getMove() {
+        return move;
     }
 }
