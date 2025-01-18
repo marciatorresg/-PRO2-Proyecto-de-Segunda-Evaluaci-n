@@ -43,7 +43,8 @@ class AIPlayer extends Player {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == Board.EMPTY) {
-                    char[][] newBoard = board;
+                    // Crear una copia profunda del tablero
+                    char[][] newBoard = deepCopyBoard(board);
                     newBoard[i][j] = currentSymbol;
                     Move move = new Move(i, j);
                     NodeTree<GameState> child = new NodeTree<>(new GameState(newBoard, move));
@@ -52,6 +53,14 @@ class AIPlayer extends Player {
                 }
             }
         }
+    }
+
+    private char[][] deepCopyBoard(char[][] board) {
+        char[][] newBoard = new char[board.length][board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            System.arraycopy(board[i], 0, newBoard[i], 0, board[i].length);
+        }
+        return newBoard;
     }
 
     private char switchPlayer(char currentSymbol) {
@@ -73,8 +82,9 @@ class AIPlayer extends Player {
 
         for (Tree<GameState> childTree : node.getChildren()) {
             MinimaxResult childResult = minimax(childTree.getRoot(), !isMaximizing);
-            if (isMaximizing && childResult.score > bestResult.score ||
-                !isMaximizing && childResult.score < bestResult.score) {
+            if (isMaximizing && childResult.score > bestResult.score) {
+                bestResult = new MinimaxResult(childResult.score, childTree.getRoot());
+            } else if (!isMaximizing && childResult.score < bestResult.score) {
                 bestResult = new MinimaxResult(childResult.score, childTree.getRoot());
             }
         }
@@ -85,7 +95,8 @@ class AIPlayer extends Player {
     private int evaluateBoard(char[][] board) {
         if (BoardUtils.checkWin(board, Board.AI)) return 10;
         if (BoardUtils.checkWin(board, Board.HUMAN)) return -10;
-        return 0;
+        if (BoardUtils.isFull(board)) return 0; // Empate
+        return 0; // Estado neutro
     }
 
     private static class MinimaxResult {
@@ -111,6 +122,11 @@ class GameState {
     public char[][] getBoard() {
         return board;
     }
+
+    public Move getMove() {
+        return move;
+    }
+}
 
     public Move getMove() {
         return move;
