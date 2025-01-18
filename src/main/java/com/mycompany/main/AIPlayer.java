@@ -69,7 +69,7 @@ class AIPlayer extends Player {
             return new MinimaxResult(score, node);
         }
 
-        MinimaxResult bestResult = new MinimaxResult(isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE, null);
+        MinimaxResult bestResult = new MinimaxResult(isMaximizing ? Integer.MAX_VALUE : Integer.MIN_VALUE, null);
 
         for (Tree<GameState> childTree : node.getChildren()) {
             MinimaxResult childResult = minimax(childTree.getRoot(), !isMaximizing);
