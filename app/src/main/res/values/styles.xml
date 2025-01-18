@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="FuturisticThinTextStyle">
+        <item name="android:fontFamily">sans-serif-thin</item> <!-- Fuente ligera -->
+        <item name="android:textSize">36sp</item> <!-- Tamaño grande para destacar -->
+        <item name="android:textColor">#FFFFFF</item> <!-- Color blanco -->
+        <item name="android:letterSpacing">0.25</item> <!-- Espaciado entre letras -->
+        <item name="android:shadowColor">#888888</item> <!-- Sombra gris -->
+        <item name="android:shadowDx">2</item> <!-- Desplazamiento sombra en X -->
+        <item name="android:shadowDy">2</item> <!-- Desplazamiento sombra en Y -->
+        <item name="android:shadowRadius">6</item> <!-- Difuminado de la sombra -->
+        <item name="android:lineSpacingExtra">4sp</item> <!-- Espaciado entre líneas -->
+    </style>
+    <style name="FuturisticThinTextStyle2">
+        <item name="android:fontFamily">sans-serif-medium</item> <!-- Fuente más gruesa -->
+        <item name="android:textSize">36sp</item> <!-- Tamaño grande para destacar -->
+        <item name="android:textColor">#FFFFFF</item> <!-- Color blanco -->
+        <item name="android:letterSpacing">0.25</item> <!-- Espaciado entre letras -->
+        <item name="android:shadowColor">#888888</item> <!-- Sombra gris -->
+        <item name="android:shadowDx">2</item> <!-- Desplazamiento sombra en X -->
+        <item name="android:shadowDy">2</item> <!-- Desplazamiento sombra en Y -->
+        <item name="android:shadowRadius">6</item> <!-- Difuminado de la sombra -->
+        <item name="android:lineSpacingExtra">4sp</item> <!-- Espaciado entre líneas -->
+        <item name="android:background">#00FFFF</item> <!-- Fondo cian -->
+
+    </style>
+
+</resources>

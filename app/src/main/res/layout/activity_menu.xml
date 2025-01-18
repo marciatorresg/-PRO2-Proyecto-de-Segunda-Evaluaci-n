@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/fondo4"
+    android:gravity="center"
+    tools:context=".ui.AddPlayers">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/titulo2"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+       />
+
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="-40dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/logo1" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/singleBtm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:text="SINGLE PLAYER"
+        style="@style/FuturisticThinTextStyle2"
+        android:textSize="12dp"
+        android:background="@drawable/round_back_blue1000"
+
+        />
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/multiBtm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:text="MULTIPLAYER"
+        style="@style/FuturisticThinTextStyle2"
+        android:textSize="12dp"
+        android:background="@drawable/round_back_blue1000"
+
+        />
+</LinearLayout>
